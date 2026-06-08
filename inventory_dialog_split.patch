@@ -1,0 +1,168 @@
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/InventoryTab.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/InventoryTab.tsx
+index 1234567..89abcde 100644
+--- a/src/app/(control-panel)/course/components/views/products/product/tabs/InventoryTab.tsx
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/InventoryTab.tsx
+@@ -121,36 +121,9 @@ export default function InventoryTab() {
+   const [openTopicDialog, setOpenTopicDialog] = useState(false);
+   const [openSubtopicDialog, setOpenSubtopicDialog] = useState(false);
+   const [openQuizDialog, setOpenQuizDialog] = useState(false);
+-
+-  const handleOpenTopicDialog = () => setOpenTopicDialog(true);
+-  const handleCloseTopicDialog = () => setOpenTopicDialog(false);
+-
+-  const handleOpenSubtopicDialog = () => setOpenSubtopicDialog(true);
+-  const handleCloseSubtopicDialog = () => setOpenSubtopicDialog(false);
+-
+-  const handleOpenQuizDialog = () => setOpenQuizDialog(true);
+-  const handleCloseQuizDialog = () => setOpenQuizDialog(false);
+-
+-  const renderTopicDialog = () => (
+-    <Dialog open={openTopicDialog} onClose={handleCloseTopicDialog}>
+-      <DialogTitle>Add Topic</DialogTitle>
+-      <DialogContent>
+-        <TextField label="Topic Name" fullWidth variant="outlined" margin="dense" />
+-      </DialogContent>
+-      <DialogActions>
+-        <Button onClick={handleCloseTopicDialog}>Cancel</Button>
+-        <Button variant="contained" color="primary">Add</Button>
+-      </DialogActions>
+-    </Dialog>
+-  );
+-
+-  const renderSubtopicDialog = () => (
+-    <Dialog open={openSubtopicDialog} onClose={handleCloseSubtopicDialog}>
+-      <DialogTitle>Add Subtopic</DialogTitle>
+-      <DialogContent>
+-        <TextField label="Subtopic Name" fullWidth variant="outlined" margin="dense" />
+-      </DialogContent>
+-      <DialogActions>
+-        <Button onClick={handleCloseSubtopicDialog}>Cancel</Button>
+-        <Button variant="contained" color="primary">Add</Button>
+-      </DialogActions>
+-    </Dialog>
+-  );
+-
+-  const renderQuizDialog = () => (
+-    <Dialog open={openQuizDialog} onClose={handleCloseQuizDialog}>
+-      <DialogTitle>Add Quiz</DialogTitle>
+-      <DialogContent>
+-        <TextField label="Question" fullWidth variant="outlined" margin="dense" />
+-        <TextField label="Option 1" fullWidth variant="outlined" margin="dense" />
+-        <TextField label="Option 2" fullWidth variant="outlined" margin="dense" />
+-        <TextField label="Option 3" fullWidth variant="outlined" margin="dense" />
+-        <TextField label="Option 4" fullWidth variant="outlined" margin="dense" />
+-      </DialogContent>
+-      <DialogActions>
+-        <Button onClick={handleCloseQuizDialog}>Cancel</Button>
+-        <Button variant="contained" color="primary">Add</Button>
+-      </DialogActions>
+-    </Dialog>
+-  );
++  import TopicDialog from "./components/TopicDialog";
++  import SubtopicDialog from "./components/SubtopicDialog";
++  import QuizDialog from "./components/QuizDialog";
++
++  const handleOpenTopicDialog = () => setOpenTopicDialog(true);
++  const handleOpenSubtopicDialog = () => setOpenSubtopicDialog(true);
++  const handleOpenQuizDialog = () => setOpenQuizDialog(true);
++
++  const handleCloseTopicDialog = () => setOpenTopicDialog(false);
++  const handleCloseSubtopicDialog = () => setOpenSubtopicDialog(false);
++  const handleCloseQuizDialog = () => setOpenQuizDialog(false);
++
++  return (
++    <>
++      <TopicDialog open={openTopicDialog} onClose={handleCloseTopicDialog} />
++      <SubtopicDialog open={openSubtopicDialog} onClose={handleCloseSubtopicDialog} />
++      <QuizDialog open={openQuizDialog} onClose={handleCloseQuizDialog} />
++    </>
++  );
++}
++
++export default InventoryTab;
++
++
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/components/TopicDialog.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/components/TopicDialog.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/components/TopicDialog.tsx
+@@ -0,0 +1,28 @@
++import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
++
++interface TopicDialogProps {
++  open: boolean;
++  onClose: () => void;
++}
++
++export default function TopicDialog({ open, onClose }: TopicDialogProps) {
++  return (
++    <Dialog open={open} onClose={onClose}>
++      <DialogTitle>Add Topic</DialogTitle>
++      <DialogContent>
++        <TextField label="Topic Name" fullWidth variant="outlined" margin="dense" />
++      </DialogContent>
++      <DialogActions>
++        <Button onClick={onClose}>Cancel</Button>
++        <Button variant="contained" color="primary">Add</Button>
++      </DialogActions>
++    </Dialog>
++  );
++}
++
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/components/SubtopicDialog.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/components/SubtopicDialog.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/components/SubtopicDialog.tsx
+@@ -0,0 +1,28 @@
++import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
++
++interface SubtopicDialogProps {
++  open: boolean;
++  onClose: () => void;
++}
++
++export default function SubtopicDialog({ open, onClose }: SubtopicDialogProps) {
++  return (
++    <Dialog open={open} onClose={onClose}>
++      <DialogTitle>Add Subtopic</DialogTitle>
++      <DialogContent>
++        <TextField label="Subtopic Name" fullWidth variant="outlined" margin="dense" />
++      </DialogContent>
++      <DialogActions>
++        <Button onClick={onClose}>Cancel</Button>
++        <Button variant="contained" color="primary">Add</Button>
++      </DialogActions>
++    </Dialog>
++  );
++}
++
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/components/QuizDialog.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/components/QuizDialog.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/components/QuizDialog.tsx
+@@ -0,0 +1,35 @@
++import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
++
++interface QuizDialogProps {
++  open: boolean;
++  onClose: () => void;
++}
++
++export default function QuizDialog({ open, onClose }: QuizDialogProps) {
++  return (
++    <Dialog open={open} onClose={onClose}>
++      <DialogTitle>Add Quiz</DialogTitle>
++      <DialogContent>
++        <TextField label="Question" fullWidth variant="outlined" margin="dense" />
++        <TextField label="Option 1" fullWidth variant="outlined" margin="dense" />
++        <TextField label="Option 2" fullWidth variant="outlined" margin="dense" />
++        <TextField label="Option 3" fullWidth variant="outlined" margin="dense" />
++        <TextField label="Option 4" fullWidth variant="outlined" margin="dense" />
++      </DialogContent>
++      <DialogActions>
++        <Button onClick={onClose}>Cancel</Button>
++        <Button variant="contained" color="primary">Add</Button>
++      </DialogActions>
++    </Dialog>
++  );
++}

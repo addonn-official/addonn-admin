@@ -1,0 +1,177 @@
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/InventoryTab.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/InventoryTab.tsx
+index 83b4a2a..b29cd34 100644
+--- a/src/app/(control-panel)/course/components/views/products/product/tabs/InventoryTab.tsx
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/InventoryTab.tsx
+@@ -1,6 +1,10 @@
+ import React, { useState } from 'react';
+ import { Button } from '@/components/ui/button';
+ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+ import { Input } from '@/components/ui/input';
+ import { Plus, Trash2, Edit } from 'lucide-react';
++import MainHeadingCard from './MainHeadingCard';
++import SubHeadingDialog from './SubHeadingDialog';
++import QuizEditorDialog from './QuizEditorDialog';
++import RichTextEditor from './RichTextEditor';
+
+ export default function InventoryTab() {
+   const [topics, setTopics] = useState([]);
+@@ -121,36 +125,9 @@ export default function InventoryTab() {
+       </div>
+
+       {/* Main Topic Dialog */}
+-      <Dialog open={isMainDialogOpen} onOpenChange={setMainDialogOpen}>
+-        <DialogContent>
+-          <DialogHeader>
+-            <DialogTitle>Edit Topic</DialogTitle>
+-          </DialogHeader>
+-          {selectedTopic && (
+-            <Input
+-              value={selectedTopic.name}
+-              onChange={(e) => updateTopicName(selectedTopic.id, e.target.value)}
+-            />
+-          )}
+-        </DialogContent>
+-      </Dialog>
+-
+-      {/* Subtopic Dialog */}
+-      <Dialog open={isSubDialogOpen} onOpenChange={setSubDialogOpen}>
+-        <DialogContent>
+-          <DialogHeader>
+-            <DialogTitle>Edit Subtopic</DialogTitle>
+-          </DialogHeader>
+-          {selectedSubTopic && (
+-            <Input
+-              value={selectedSubTopic.name}
+-              onChange={(e) =>
+-                updateSubTopicName(
+-                  selectedSubTopic.parent.id,
+-                  selectedSubTopic.id,
+-                  e.target.value
+-                )
+-              }
+-            />
+-          )}
+-        </DialogContent>
+-      </Dialog>
++      <MainHeadingCard
++        isOpen={isMainDialogOpen}
++        onOpenChange={setMainDialogOpen}
++        selectedTopic={selectedTopic}
++        updateTopicName={updateTopicName}
++      />
++      <SubHeadingDialog
++        isOpen={isSubDialogOpen}
++        onOpenChange={setSubDialogOpen}
++        selectedSubTopic={selectedSubTopic}
++        updateSubTopicName={updateSubTopicName}
++      />
+   );
+ }
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/MainHeadingCard.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/MainHeadingCard.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/MainHeadingCard.tsx
+@@ -0,0 +1,28 @@
++import React from 'react';
++import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
++import { Input } from '@/components/ui/input';
++
++interface MainHeadingCardProps {
++  isOpen: boolean;
++  onOpenChange: (open: boolean) => void;
++  selectedTopic: any;
++  updateTopicName: (id: number, name: string) => void;
++}
++
++export default function MainHeadingCard({
++  isOpen,
++  onOpenChange,
++  selectedTopic,
++  updateTopicName,
++}: MainHeadingCardProps) {
++  return (
++    <Dialog open={isOpen} onOpenChange={onOpenChange}>
++      <DialogContent>
++        <DialogHeader>
++          <DialogTitle>Edit Topic</DialogTitle>
++        </DialogHeader>
++        {selectedTopic && (
++          <Input
++            value={selectedTopic.name}
++            onChange={(e) => updateTopicName(selectedTopic.id, e.target.value)}
++          />
++        )}
++      </DialogContent>
++    </Dialog>
++  );
++}
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/SubHeadingDialog.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/SubHeadingDialog.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/SubHeadingDialog.tsx
+@@ -0,0 +1,31 @@
++import React from 'react';
++import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
++import { Input } from '@/components/ui/input';
++
++interface SubHeadingDialogProps {
++  isOpen: boolean;
++  onOpenChange: (open: boolean) => void;
++  selectedSubTopic: any;
++  updateSubTopicName: (topicId: number, subId: number, name: string) => void;
++}
++
++export default function SubHeadingDialog({
++  isOpen,
++  onOpenChange,
++  selectedSubTopic,
++  updateSubTopicName,
++}: SubHeadingDialogProps) {
++  return (
++    <Dialog open={isOpen} onOpenChange={onOpenChange}>
++      <DialogContent>
++        <DialogHeader>
++          <DialogTitle>Edit Subtopic</DialogTitle>
++        </DialogHeader>
++        {selectedSubTopic && (
++          <Input
++            value={selectedSubTopic.name}
++            onChange={(e) =>
++              updateSubTopicName(selectedSubTopic.parent.id, selectedSubTopic.id, e.target.value)
++            }
++          />
++        )}
++      </DialogContent>
++    </Dialog>
++  );
++}
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/QuizEditorDialog.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/QuizEditorDialog.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/QuizEditorDialog.tsx
+@@ -0,0 +1,10 @@
++import React from 'react';
++
++export default function QuizEditorDialog() {
++  return (
++    <div className="p-4 border rounded-lg bg-gray-50">
++      <h2 className="font-semibold">Quiz Editor Placeholder</h2>
++      <p className="text-sm text-gray-600">Future quiz editing logic will go here.</p>
++    </div>
++  );
++}
+diff --git a/src/app/(control-panel)/course/components/views/products/product/tabs/RichTextEditor.tsx b/src/app/(control-panel)/course/components/views/products/product/tabs/RichTextEditor.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/app/(control-panel)/course/components/views/products/product/tabs/RichTextEditor.tsx
+@@ -0,0 +1,11 @@
++import React from 'react';
++
++export default function RichTextEditor() {
++  return (
++    <div className="p-4 border rounded-lg bg-gray-50">
++      <h2 className="font-semibold">Rich Text Editor Placeholder</h2>
++      <p className="text-sm text-gray-600">Future editor functionality will go here.</p>
++    </div>
++  );
++}
